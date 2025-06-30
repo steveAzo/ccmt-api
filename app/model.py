@@ -1,7 +1,8 @@
 import torch
 from torchvision import models, transforms
 from PIL import Image
-import io
+import os
+import requests
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -13,12 +14,27 @@ class_labels = [
     'Cashew - gumosis', 'Cashew - red rust', 'Cashew - anthracnose', 'Cashew - leaf miner', 'Cashew - healthy'
 ]
 
+MODEL_PATH = 'models/best_model_v1_75percent.pth'
+MODEL_URL = 'https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v1.0.0/best_model_v1_75percent.pth'
+
+def download_model():
+    if not os.path.exists('models'):
+        os.makedirs('models')
+    if not os.path.isfile(MODEL_PATH):
+        print("Downloading model...")
+        response = requests.get(MODEL_URL)
+        with open(MODEL_PATH, 'wb') as f:
+            f.write(response.content)
+        print("Model downloaded successfully!")
+
 def load_model():
+    download_model()
     model = models.resnet18(pretrained=False)
     model.fc = torch.nn.Linear(model.fc.in_features, len(class_labels))
-    model.load_state_dict(torch.load('models/best_model_v1_75percent.pth', map_location=device))
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
     model.eval()
     return model, class_labels
+
 
 def predict_image(image: Image.Image, model, class_labels):
     transform = transforms.Compose([
