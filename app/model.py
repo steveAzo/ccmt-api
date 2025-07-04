@@ -3,7 +3,7 @@ from torchvision import models
 from PIL import Image
 import os
 import requests
-from app.utils import preprocess_image
+from utils import preprocess_image
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
