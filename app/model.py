@@ -1,5 +1,5 @@
 import torch
-from torchvision.models import effecientnet_b2
+from torchvision.models import efficientnet_b2
 from PIL import Image
 import os
 import requests
