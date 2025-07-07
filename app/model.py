@@ -15,8 +15,8 @@ class_labels = [
     'Cashew - gummosis', 'Cashew - red rust', 'Cashew - anthracnose', 'Cashew - leaf miner', 'Cashew - healthy'
 ]
 
-MODEL_PATH = 'models/best_model_v1_75percent.pth'
-MODEL_URL = 'https://github.com/steveAzo/ccmt-api/releases/download/v1.0/best_model_v1_71percent.pth'
+MODEL_PATH = 'models/best_model_v1_91percent.pth'
+MODEL_URL = 'https://github.com/steveAzo/ccmt-api/releases/download/v1.0/best_model_efficientnetV1.pth'
 
 def download_model():
     try:
