@@ -1,5 +1,5 @@
 import torch
-from torchvision import models
+from torchvision.models import effecientnet_b2
 from PIL import Image
 import os
 import requests
@@ -37,8 +37,8 @@ def download_model():
 def load_model():
     try:
         download_model()
-        model = models.resnet34(pretrained=False)
-        model.fc = torch.nn.Linear(model.fc.in_features, len(class_labels))
+        model = efficientnet_b2(pretrained=False)
+        model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, len(class_labels))
         model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
         model = model.to(device).eval()
         return model, class_labels
