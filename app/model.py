@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import requests
 from utils import preprocess_image
+import timm
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -34,16 +35,18 @@ def download_model():
     except Exception as e:
         raise Exception(f"Model download failed: {str(e)}")
 
+
 def load_model():
     try:
         download_model()
-        model = efficientnet_b2(pretrained=False)
-        model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, len(class_labels))
+        model = timm.create_model('efficientnet_b2', pretrained=False)
+        model.classifier = torch.nn.Linear(model.classifier.in_features, len(class_labels))
         model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
         model = model.to(device).eval()
         return model, class_labels
     except Exception as e:
         raise Exception(f"Failed to load model: {str(e)}")
+
 
 def predict_image(image: Image.Image, model, class_labels):
     try:
